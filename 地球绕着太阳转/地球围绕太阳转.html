@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas-地球围绕着太阳转</title>
+    <style>
+        #canvas {
+            /* border: 2px solid #777; */
+            display: block;
+            margin: 100px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="600" height="400"></canvas>
+</body>
+<script>
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var sun = new Image();
+    sun.src = "./img/Canvas_sun.png";
+
+    var earth = new Image();
+    earth.src = "./img/Canvas_earth.png";
+
+    var count = 0;
+    var imageArr = [sun, earth];
+    imageArr.forEach(function (img) {
+        img.onload = function () {
+            count += 1;
+            if (count == imageArr.length) {
+                draw();
+            }
+        }
+    })
+    //绘制
+    function draw() {
+        context.save();
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(sun, 0, 0, sun.width, sun.height);
+        var now = new Date();
+        var seconds = now.getSeconds();
+        var milliseconds = now.getMilliseconds();
+        seconds = seconds + milliseconds / 1000;
+        var percent = seconds / 60;
+        var angle = percent * 360;
+        var sradian = angle / 180 * Math.PI;
+        context.translate(150, 150);
+        context.rotate(sradian);
+        context.drawImage(earth, 110, -earth.height / 2, earth.width, earth.height);
+        context.restore();
+        window.requestAnimationFrame(draw);
+
+    }
+
+</script>
+
+</html>
